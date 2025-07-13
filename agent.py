@@ -10,32 +10,33 @@ from livekit.agents import (
     llm,
 )
 from livekit.agents.pipeline import VoicePipelineAgent
-from livekit.plugins import openai, deepgram, silero
+from livekit.plugins import deepgram, silero
 from DifyLLM import DifyLLM
+import json
 
 load_dotenv(dotenv_path=".env.local")
 logger = logging.getLogger("voice-agent")
 
 
 def prewarm(proc: JobProcess):
-    proc.userdata["vad"] = silero.VAD.load()
-
-
-async def entrypoint(ctx: JobContext):
-    initial_ctx = llm.ChatContext().append(
-        role="system",
-        text=(
-            "You are a voice assistant created by LiveKit. Your interface with users will be voice. "
-            "You should use short and concise responses, and avoiding usage of unpronouncable punctuation. "
-            "You were created as a demo to showcase the capabilities of LiveKit's agents framework."
-        ),
+    proc.userdata["vad"] = silero.VAD.load(
+        min_silence_duration=0.7,
+        prefix_padding_duration=0.5,
+        padding_duration=0.3
     )
 
+async def entrypoint(ctx: JobContext):
+    initial_ctx = llm.ChatContext()
+    
     logger.info(f"connecting to room {ctx.room.name}")
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
 
     # Wait for the first participant to connect
     participant = await ctx.wait_for_participant()
+    print("initial_ctx:",participant.metadata)
+    initial_ctx._metadata["access_token"] = json.loads(participant.metadata).get("access_token", None) if participant.metadata else None
+    initial_ctx._metadata["user_id"] = participant.identity
+
     logger.info(f"starting voice assistant for participant {participant.identity}")
 
     # This project is configured to use Deepgram STT, OpenAI LLM and TTS plugins
