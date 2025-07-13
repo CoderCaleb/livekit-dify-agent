@@ -28,6 +28,7 @@ from openai.types.chat.chat_completion_chunk import Choice, ChoiceDelta
 
 
 class DifyLLM(llm.LLM):
+    ## since chat method is @abstractmethod, we know that we need to and can modify this chat method
     async def chat(
         self,
         *,
@@ -40,7 +41,10 @@ class DifyLLM(llm.LLM):
         tool_choice: Union[ToolChoice, Literal["auto", "required", "none"]] | None = None
     ) -> "DifyLLMStream":
         print("Debug: Entered the chat method.")
+        
+        ##find latest message from user
         latest_query = next(
+            ##this will not return a list, but rather a generator expression which is more performance friendly
             (msg.content for msg in reversed(chat_ctx.messages) if msg.role == "user"),
             None,
         )
@@ -70,13 +74,14 @@ class DifyLLM(llm.LLM):
             chat_ctx=chat_ctx,
             fnc_ctx=fnc_ctx,
             conn_options=conn_options,
-            api_url="http://localhost/v1/chat-messages",  # Replace with the actual endpoint
+            api_url="http://localhost/v1/chat-messages",
             payload=payload,
             headers=headers,
         )
 
 
-class DifyLLMStream(llm.LLMStream):
+class DifyLLMStream(llm.LLMStream): ##in charge of making request to API and streaming the responses to user
+    ##auto runs when object is initialised
     def __init__(
         self,
         llm: llm.LLM,
@@ -89,6 +94,7 @@ class DifyLLMStream(llm.LLMStream):
         headers: dict,
     ) -> None:
         print("Debug: Initializing DifyLLMStream.")
+        ##super is to access parent method which is init in this case, without super, child init would be ran as it overrides parents init
         super().__init__(llm, chat_ctx=chat_ctx, fnc_ctx=fnc_ctx, conn_options=conn_options)
         self._api_url = api_url
         self._payload = payload
@@ -97,29 +103,33 @@ class DifyLLMStream(llm.LLMStream):
     async def _run(self):
         print("Debug: Entering _run method.")
         print("Debug: Chat Context:", self.chat_ctx._metadata)
-        if self.chat_ctx._metadata.get("user_id",None) == None:
+        ##set user_id in metadata
+        if self.chat_ctx._metadata.get("user_id",None) == None: ##why do this when payload["user"] will be None if chat_ctx is none, will look into this
             self._chat_ctx._metadata["user_id"] = self._payload["user"]
-        if self._payload["query"] == None:    
+        if self._payload["query"] == None:
             raise ValueError("No valid user query found in the chat context.")
-        async with httpx.AsyncClient(timeout=self._conn_options.timeout) as client:  # Step 1
+        ##purpose of with is to ensure proper cleanup (closing HTTP connection etc) even if theres error.
+        ##result of __aenter__ is assigned to the variable after "as", and __aexit is ran after block finishes
+        async with httpx.AsyncClient(timeout=self._conn_options.timeout) as client:  # Step 1 (set up async HTTP client, so that start API request while doing other processes at the same time)
             print(f"Debug: Making request to {self._api_url} with payload: {self._payload}")
-            async with client.stream("POST", self._api_url, json=self._payload, headers=self._headers, timeout=15) as response:  # Step 2
+            async with client.stream("POST", self._api_url, json=self._payload, headers=self._headers, timeout=15) as response:  # Step 2 (send POST request for a stream of events)
                 print(f"Debug: Response received with status code: {response.status_code}")
-                async for line in response.aiter_lines():  # Step 3
+                ##Iterators are single-use, forward-only.
+                ##Iterables (like lists) can give you new iterators anytime to restart looping.
+                ##aiter_lines() is a async iterator
+                async for line in response.aiter_lines():  # Step 3 (loop through aysnc iterator which will wait for new data while doing other processes)
                     print(f"Debug: Received line: {line}")
                     if line.startswith("data:"):  # Step 4
-                        event_data = line.lstrip("data:").strip()  # Step 5
+                        event_data = line.lstrip("data:").strip()  # Step 5 (remove data: at the start of the string)
                         print(f"Debug: Parsed event data: {event_data}")
                         parsed_event_data = json.loads(event_data)
                         if parsed_event_data["event"] == "message":
                             parsed_chunk = self._parse_chunk(event_data)
                             if parsed_chunk:
                                 print(f"Debug: Parsed chunk: {parsed_chunk}")
-                                self._event_ch.send_nowait(parsed_chunk)
+                                self._event_ch.send_nowait(parsed_chunk) ##send message to user
                         elif parsed_event_data["event"] == "node_started":
-                            self._chat_ctx._metadata["conversation_id"] = parsed_event_data["conversation_id"]
-
-                            
+                            self._chat_ctx._metadata["conversation_id"] = parsed_event_data["conversation_id"] ##set conversation_id generated by Dify to metadata
 
     def _parse_chunk(self, response: str) -> llm.ChatChunk | None:
         print(f"Debug: Parsing chunk from response: {response}")

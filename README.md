@@ -1,50 +1,22 @@
-<a href="https://livekit.io/">
-  <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="100" height="100">
-</a>
+# 🗣️ Voice Agent for Christian Tee Shop (Dify + LiveKit + Python)
 
-# Python Voice Agent
+## Overview
 
-<p>
-  <a href="https://cloud.livekit.io/projects/p_/sandbox"><strong>Deploy a sandbox app</strong></a>
-  •
-  <a href="https://docs.livekit.io/agents/overview/">LiveKit Agents Docs</a>
-  •
-  <a href="https://livekit.io/cloud">LiveKit Cloud</a>
-  •
-  <a href="https://blog.livekit.io/">Blog</a>
-</p>
+This is a custom voice agent built using **LiveKit**, **Dify**, and **Python** to assist with operations in a Christian t-shirt e-commerce shop. The agent handles spoken input, connects to an LLM for intelligent responses, retrieves order data, and pulls from a knowledge base of shop specific questions
 
-A basic example of a voice agent using LiveKit and Python.
+## Features
 
-## Dev Setup
+- 🎧 **Real-time voice interaction** via LiveKit audio streams using WebRTC tech
+- 🧠 **LLM-powered responses** using Dify’s language model API
+- 📦 **Order data retrieval**: Agent can fetch order details when provided an order number (via internal API)
+- 📚 **Knowledge base integration**: Pulls from a knowledge base to answer shop specfic questions
+- 🔒 **Context-aware and secure**: LLM access is scoped and limited to business-specific data
 
-Clone the repository and install dependencies to a virtual environment:
+## Tech Stack
 
-```console
-cd voice-pipeline-agent-python
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
+- **Voice SDK:** LiveKit Audio (WebRTC)
+- **LLM Interface:** Dify
+- **Backend:** Python (FastAPI or Flask)
+- **Data Sources:** REST APIs + internal order DB
+- **Knowledge Base:** Vector store or Dify’s inbuilt knowledge space
 
-Set up the environment by copying `.env.example` to `.env.local` and filling in the required values:
-
-- `LIVEKIT_URL`
-- `LIVEKIT_API_KEY`
-- `LIVEKIT_API_SECRET`
-- `OPENAI_API_KEY`
-- `DEEPGRAM_API_KEY`
-
-You can also do this automatically using the LiveKit CLI:
-
-```console
-lk app env
-```
-
-Run the agent:
-
-```console
-python3 agent.py dev
-```
-
-This agent requires a frontend application to communicate with. You can use one of our example frontends in [livekit-examples](https://github.com/livekit-examples/), create your own following one of our [client quickstarts](https://docs.livekit.io/realtime/quickstarts/), or test instantly against one of our hosted [Sandbox](https://cloud.livekit.io/projects/p_/sandbox) frontends.

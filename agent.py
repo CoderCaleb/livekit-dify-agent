@@ -25,24 +25,28 @@ def prewarm(proc: JobProcess):
         padding_duration=0.3
     )
 
+##When a user connects to a room, LiveKit server sends a request to an available worker (agent code). A worker accepts and starts a new process to handle the job. (the job is the entrypoint function)
 async def entrypoint(ctx: JobContext):
+    
+    ## initial_ctx is a variable that contains _metadata and chat messages
     initial_ctx = llm.ChatContext()
     
     logger.info(f"connecting to room {ctx.room.name}")
+    
+    ## Connect user to room with audio only
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
 
     # Wait for the first participant to connect
     participant = await ctx.wait_for_participant()
     print("initial_ctx:",participant.metadata)
+    
+    ##add access token and user_id as context for future use in Dify API calls
     initial_ctx._metadata["access_token"] = json.loads(participant.metadata).get("access_token", None) if participant.metadata else None
     initial_ctx._metadata["user_id"] = participant.identity
 
     logger.info(f"starting voice assistant for participant {participant.identity}")
 
-    # This project is configured to use Deepgram STT, OpenAI LLM and TTS plugins
-    # Other great providers exist like Cartesia and ElevenLabs
-    # Learn more and pick the best one for your app:
-    # https://docs.livekit.io/agents/plugins
+    ##used my own DifyLLM class to support using the Dify API as the LLM
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(),
@@ -55,7 +59,6 @@ async def entrypoint(ctx: JobContext):
 
     # The agent should be polite and greet the user when it joins :)
     await agent.say("Hello, how may i help you today?", allow_interruptions=True)
-
 
 if __name__ == "__main__":
     cli.run_app(
