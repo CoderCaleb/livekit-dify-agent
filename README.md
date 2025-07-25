@@ -21,19 +21,19 @@ This is a custom voice agent built using **LiveKit**, **Dify**, and **Python** t
 - **Knowledge Base:** Vector store or Dify’s inbuilt knowledge space
 
 <h3>🗣️ Chatbot UI – Voice Mode</h3>
-<img src="https://i.postimg.cc/zy4ZjfMB/78-B14-BC3-88-A9-4-AF0-8-C80-5-B762-FC055-F7-L0-001-30-03-2025-6-09-26-PM.jpg" alt="Chatbot Voice UI" width="700"/>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/78B14BC3-88A9-4AF0-8C80-5B762FC055F7_L0_001-30_03_2025,%206_09_26%20PM.jpg?updatedAt=1753421649670" alt="Chatbot Voice UI" width="700"/>
 
 <hr/>
 
 <h3>💬 Chatbot UI – Text Mode</h3>
-<img src="https://i.postimg.cc/t1P0mjQz/DDADB5-D1-5-A3-D-4396-B5-E0-4-B8-ADFCD27-CC-L0-001-30-03-2025-6-18-29-PM.jpg" alt="Chatbot Text UI" width="700"/>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/DDADB5D1-5A3D-4396-B5E0-4B8ADFCD27CC_L0_001-30_03_2025,%206_18_29%20PM.jpg?updatedAt=1753421649694" alt="Chatbot Text UI" width="700"/>
 
 <hr/>
 
 <h3>🧠 Chatbot Logic – Dify Flow (Part 1)</h3>
-<img src="https://i.postimg.cc/QVqD3hB4/Screenshot-2025-03-30-at-6-24-52-PM.png" alt="Dify Flow Part 1" width="700"/>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/Screenshot%202025-03-30%20at%206.24.52%20PM.png?updatedAt=1753421649375" alt="Dify Flow Part 1" width="700"/>
 
 <hr/>
 
 <h3>🧠 Chatbot Logic – Dify Flow (Part 2)</h3>
-<img src="https://i.postimg.cc/SnnbC9g3/Screenshot-2025-03-30-at-6-52-51-PM.png" alt="Dify Flow Part 2" width="700"/>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/Screenshot%202025-03-30%20at%206.52.51%20PM.png?updatedAt=1753421649543" alt="Dify Flow Part 2" width="700"/>
