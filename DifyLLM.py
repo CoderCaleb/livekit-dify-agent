@@ -73,7 +73,7 @@ class DifyLLM(llm.LLM):
             chat_ctx=chat_ctx,
             fnc_ctx=fnc_ctx,
             conn_options=conn_options,
-            api_url=f"{os.environ.get("DIFY_API_ENDPOINT")}/v1/chat-messages",
+            api_url = f"{os.environ.get('DIFY_API_ENDPOINT')}/v1/chat-messages",
             payload=payload,
             headers=headers,
         )
