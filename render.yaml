@@ -3,12 +3,11 @@ services:
     name: python-agent
     repo: https://github.com/livekit-examples/agent-deployment
 
-    # This should be a directory, NOT the Dockerfile itself
-    rootDir: .  # ⛳ change from "Dockerfile" to "."
+    rootDir: .
 
-    runtime: image
+    runtime: docker
     plan: starter
-    region: singapore  # 🔁 Optional: switch to your region if not US
+    region: singapore
 
     # Graceful shutdown delay (standard 5 minutes)
     maxShutdownDelaySeconds: 300
