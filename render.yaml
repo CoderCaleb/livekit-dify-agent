@@ -19,5 +19,19 @@ services:
       targetMemoryPercent: 60
 
     envVars:
-      - fromGroup: agent-env
-version: "1"
+      - key: DEEPGRAM_API_KEY
+        sync: false
+      - key: LIVEKIT_API_KEY
+        sync: false
+      - key: LIVEKIT_API_SECRET
+        sync: false
+      - key: LIVEKIT_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DIFY_API_KEY
+        sync: false
+      - key: DIFY_API_ENDPOINT
+        sync: false
+
+    version: "1"
