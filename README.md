@@ -16,7 +16,24 @@ This is a custom voice agent built using **LiveKit**, **Dify**, and **Python** t
 
 - **Voice SDK:** LiveKit Audio (WebRTC)
 - **LLM Interface:** Dify
-- **Backend:** Python (FastAPI or Flask)
-- **Data Sources:** REST APIs + internal order DB
+- **Backend:** Python (Flask)
+- **Data Sources:** API request to MongoDB database
 - **Knowledge Base:** Vector store or Dify’s inbuilt knowledge space
 
+<h3>🗣️ Chatbot UI – Voice Mode</h3>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/78B14BC3-88A9-4AF0-8C80-5B762FC055F7_L0_001-30_03_2025,%206_09_26%20PM.jpg?updatedAt=1753421649670" alt="Chatbot Voice UI" width="700"/>
+
+<hr/>
+
+<h3>💬 Chatbot UI – Text Mode</h3>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/DDADB5D1-5A3D-4396-B5E0-4B8ADFCD27CC_L0_001-30_03_2025,%206_18_29%20PM.jpg?updatedAt=1753421649694" alt="Chatbot Text UI" width="700"/>
+
+<hr/>
+
+<h3>🧠 Chatbot Logic – Dify Flow (Part 1)</h3>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/Screenshot%202025-03-30%20at%206.24.52%20PM.png?updatedAt=1753421649375" alt="Dify Flow Part 1" width="700"/>
+
+<hr/>
+
+<h3>🧠 Chatbot Logic – Dify Flow (Part 2)</h3>
+<img src="https://ik.imagekit.io/uuuwbrc6wu/Screenshot%202025-03-30%20at%206.52.51%20PM.png?updatedAt=1753421649543" alt="Dify Flow Part 2" width="700"/>
