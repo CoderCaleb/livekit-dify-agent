@@ -1,15 +1,38 @@
-# Use an official Python base image
-FROM python:3.10-slim
+# syntax=docker/dockerfile:1
+ARG PYTHON_VERSION=3.11.6
+FROM python:${PYTHON_VERSION}-slim
 
-# Set work directory
-WORKDIR /app
+ENV PYTHONUNBUFFERED=1
 
-# Copy requirements first and install dependencies
+ARG UID=10001
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/home/appuser" \
+    --shell "/sbin/nologin" \
+    --uid "${UID}" \
+    appuser
+
+RUN apt-get update && \
+    apt-get install -y \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+USER appuser
+
+RUN mkdir -p /home/appuser/.cache
+RUN chown -R appuser /home/appuser/.cache
+
+WORKDIR /home/appuser
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --user --no-cache-dir -r requirements.txt
 
-# Copy the rest of your app
 COPY . .
 
-# Command to run your agent
-CMD ["python", "agent.py"]
+# RUN python agent.py download-files
+
+EXPOSE 8081
+
+CMD ["python", "agent.py", "start"]
