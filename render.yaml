@@ -1,7 +1,7 @@
 services:
   - type: pserv
     name: python-agent
-    repo: https://github.com/livekit-examples/agent-deployment
+    repo: https://github.com/CoderCaleb/livekit-dify-agent
     rootDir: .
 
     runtime: docker
