@@ -2,14 +2,12 @@ services:
   - type: pserv
     name: python-agent
     repo: https://github.com/livekit-examples/agent-deployment
-
     rootDir: .
 
     runtime: docker
     plan: starter
     region: singapore
 
-    # Graceful shutdown delay (standard 5 minutes)
     maxShutdownDelaySeconds: 300
 
     scaling:
@@ -34,4 +32,4 @@ services:
       - key: DIFY_API_ENDPOINT
         sync: false
 
-    version: "1"
+version: "1"
