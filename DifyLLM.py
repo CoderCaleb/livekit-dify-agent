@@ -26,7 +26,6 @@ import openai
 from openai.types.chat import ChatCompletionChunk, ChatCompletionMessageParam
 from openai.types.chat.chat_completion_chunk import Choice, ChoiceDelta
 
-
 class DifyLLM(llm.LLM):
     ## since chat method is @abstractmethod, we know that we need to and can modify this chat method
     async def chat(
@@ -74,7 +73,7 @@ class DifyLLM(llm.LLM):
             chat_ctx=chat_ctx,
             fnc_ctx=fnc_ctx,
             conn_options=conn_options,
-            api_url="http://localhost/v1/chat-messages",
+            api_url=f"{os.environ.get("DIFY_API_ENDPOINT")}/v1/chat-messages",
             payload=payload,
             headers=headers,
         )
